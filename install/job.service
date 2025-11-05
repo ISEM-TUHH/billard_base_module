@@ -1,0 +1,17 @@
+# This file gets moved to the systemd directory and registered as a cron job
+
+[Unit]
+Description=Billard Game module
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/game-pi/game-module/main.py
+WorkingDirectory = /home/game-pi/game-module/
+StandardOutput=journal
+StandardError=journal
+Restart=always
+User=game-pi
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
