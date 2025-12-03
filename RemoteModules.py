@@ -36,7 +36,7 @@ class Beamer(RemoteModule):
         except Exception as e:
             print(e)
 
-        print(f"Posted image to the beamer-module at {url}.")
+        #print(f"Posted image to the beamer-module at {url}.")
         return "Game beamer push image"
 
     def off():
@@ -66,4 +66,11 @@ class Camera(RemoteModule):
 
     def save_cached_image_training(self, coordinates):
         """ Sends coordinates to the camera module and instructs it to save the last cached image (see cache_image()) with the coordinates transformed to YOLO label format """
-        requests.get(self.endpoint("/v1/savepic"), json=coordinates, headers={"content-type": "application/json"})
+        try:
+            requests.get(self.endpoint("/v1/savepic"), json={"coords": coordinates, "action": "save-labels"}, headers={"content-type": "application/json"})
+        except:
+            pass
+
+    def save_image(self):
+        """ Only save the current image, dont do anything with coordinates """
+        requests.get(self.endpoint("v1/savepic"))

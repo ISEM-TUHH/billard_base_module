@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from flask import Flask, jsonify, render_template, render_template_string, request, send_from_directory
 from flask_cors import CORS, cross_origin
+#from flask_socketio import SocketIO
 import socket
 #import urllib.request
 import requests
@@ -21,8 +22,6 @@ class Module:
 	:type template_folder: str, optional 
 	"""
 
-	TEST_MODE = True # set test mode with environment variable PROD_OR_TEST set to anything but PROD 
-
 	def __init__(self, config="config/config.json", test_config="config/test_config.json", template_folder="", storage_folder="./storage", static_folder="./static"):
 		# test setup
 		if os.getenv("PROD_OR_TEST") == "PROD":
@@ -34,6 +33,7 @@ class Module:
 
 			print("Running in PRODUCTION MODE. Set PROD_OR_TEST to TEST (bash: `export PROD_OR_TEST=TEST`) for TEST MODE")
 		else:
+			self.TEST_MODE = True # set test mode with environment variable PROD_OR_TEST set to anything but PROD 
 			config = test_config
 			print("Running in TEST MODE. Set PROD_OR_TEST to PROD (bash: `export PROD_OR_TEST=PROD`) for PRODUCTION MODE")
 
@@ -49,6 +49,8 @@ class Module:
 
 		self.api = {"id": (lambda: self.id)}
 		self.app = Flask(__name__, template_folder=template_folder, static_folder=static_folder) # template folder would otherwise be "/template/" for stuff like index.html
+		#self.socketio = SocketIO(self.app)
+
 		cors = CORS(self.app) # allow all cross origin requests
 		self.app.add_url_rule("/id", "id", lambda: jsonify({"id": self.id}))
 		self.app.add_url_rule("/api-doc", "api-doc", lambda: jsonify({"api": self.api_flat}))
@@ -118,6 +120,11 @@ class Module:
 				self.recursive_add_all_api(nextElement, nextPath0)
 			else:
 				self.add_api(nextElement, nextPath0)
+
+	def add_all_sockets(self, sockets):
+		""" Sockets are registered in a dict like {"[Channel name]": self.handler_function, ...} """
+		for k,v in sockets.items():
+			self.socketio.on(k, v)
 
 
 	def modules_available(self, modules):
