@@ -39,11 +39,14 @@ class Beamer(RemoteModule):
         #print(f"Posted image to the beamer-module at {url}.")
         return "Game beamer push image"
 
-    def off():
+    def off(self):
         """ Method to display a black image on the beamer from the beamer module.
         """
         requests.get(self.endpoint("/v1/off"))
         return "Beamer displays a black image."
+
+    def play_sound(self, sound):
+        requests.post(self.endpoint("/v1/playsound"), json={"sound": sound})
 
 class Camera(RemoteModule):
     """ Implementation of the Camera 
