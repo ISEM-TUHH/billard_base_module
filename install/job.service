@@ -12,6 +12,7 @@ StandardError=journal
 Restart=always
 User=game-pi
 Environment="PYTHONUNBUFFERED=1"
+Environment="PROD_OR_TEST=PROD"
 
 [Install]
 WantedBy=multi-user.target
