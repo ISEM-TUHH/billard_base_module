@@ -59,8 +59,11 @@ class Camera(RemoteModule):
 
     def get_coords(self):
         """ Send request to camera module and receive the (uncorrected) coordinates """
-        response = requests.get(self.endpoint("/v1/coords"))
-        res = response.json()
+        try:
+            response = requests.get(self.endpoint("/v1/coords"))
+            res = response.json()
+        except Exception:
+            res = {}
         return res
     
     def cache_image(self):
