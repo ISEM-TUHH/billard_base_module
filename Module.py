@@ -43,7 +43,14 @@ class Module:
 
 		self.storage_dir = storage_folder
 		#self.template_folder = template_folder
-		self.secrets = dotenv_values(".env")
+		env_file = ".env"
+		dev_env_file = os.getenv("DEV_ENV")
+		print("DEV_ENV:", dev_env_file)
+		if not dev_env_file is None:
+			print("selecting DEV_ENV")
+			env_file = dev_env_file
+
+		self.secrets = dotenv_values(env_file)
 
 		self.id = self.config["id"]
 
@@ -65,7 +72,10 @@ class Module:
 	def app_run(self):
 		""" Run the server/app with for ip addresses and on the port listed in the given config file """
 		host = self.config["host_ip"]
-		port = self.config["port"]
+		if "MODULEPORT" in self.secrets.keys():
+			port = self.secrets["MODULEPORT"]
+		else:
+			port = self.config["port"]
 		self.app.run(host=host, port=port, debug=self.TEST_MODE)
 
 	def add_website(self, file):
