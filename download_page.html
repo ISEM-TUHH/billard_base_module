@@ -2,15 +2,25 @@
 <html>
     <header>
         <title>Download storage</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        </style>
     </header>
     <body>
-        <h2>Files in storage</h2>
-        This page lists all files in the storage directory. Download logs and scores of e.g. competitions
-        <br>
-        <ul>
-        {% for file in files %}
-            <li><a href="{{url_for('downloadFiles', filename=file)}}">{{ file }}</a></li>
-        {% endfor %}
-        </ul>
+        <div>
+            <h2>Files in storage</h2>
+            This page lists all files in the storage directory. Download logs and scores of e.g. competitions
+            <br>
+            <ul>
+            {% for file in files %}
+                <li><a href="{{url_for('downloadFiles', filename=file)}}">{{ file }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
     </body>
 </html>
