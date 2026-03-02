@@ -42,11 +42,17 @@ class Beamer(RemoteModule):
     def off(self):
         """ Method to display a black image on the beamer from the beamer module.
         """
-        requests.get(self.endpoint("/v1/off"))
+        try:
+            requests.get(self.endpoint("/v1/off"))
+        except:
+            pass
         return "Beamer displays a black image."
 
     def play_sound(self, sound):
-        requests.post(self.endpoint("/v1/playsound"), json={"sound": sound})
+        try:
+            requests.post(self.endpoint("/v1/playsound"), json={"sound": sound})
+        except:
+            pass
 
 class Camera(RemoteModule):
     """ Implementation of the Camera 
