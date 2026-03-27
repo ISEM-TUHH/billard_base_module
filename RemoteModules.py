@@ -12,6 +12,11 @@ class RemoteModule:
         self.port = config["port"]
         self.address = f"http://{self.ip}:{self.port}"
 
+        
+
+        if "receive_balls_endpoint" in config.keys():
+            self.receive_balls_endpoint = self.endpoint(config["receive_balls_endpoint"])
+
     def endpoint(self, endpoint):
         """ Returns full address from endpoint passed as '/a/b' or 'a/b' """
         if endpoint[0] != "/":
@@ -22,6 +27,7 @@ class Beamer(RemoteModule):
     """ Implementation of the beamer """
 
     def __init__(self, config):
+        config["receive_balls_endpoint"] = "/v1/dynamicballs"
         RemoteModule.__init__(self, config)
 
     def push_image(self, img):
